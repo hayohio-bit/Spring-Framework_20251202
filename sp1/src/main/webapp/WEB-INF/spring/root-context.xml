@@ -8,6 +8,20 @@
 		http://www.springframework.org/schema/context
 		https://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- bean definitions here -->
+	<context:component-scan base-package="org.zerock.service" />
+	
+		<bean name="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/springdb?serverTimezone=Asia/Seoul" />
+		<property name="username" value="springdbuser" />
+		<property name="password" value="1234" />
+		<property name="connectionTimeout" value="30000" />
+		<property name="minimumIdle" value="2" />
+		</bean>
+		
+		<bean name="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+			<constructor-arg ref="hikariConfig" />
+		</bean>
+
 
 </beans>
