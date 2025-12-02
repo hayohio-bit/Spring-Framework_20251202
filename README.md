@@ -25,25 +25,15 @@ Spring Boot 사용 전 기본 개념과 MVC 흐름 이해를 위한 Spring Legac
 Spring-Framework_20251202/
 
 ├── src/
-
 │ └── main/
-
 │ ├── java/
-
 │ │ └── [패키지 구조]
-
 │ ├── resources/
-
 │ │ └── [설정 파일]
-
 │ └── webapp/
-
 │ └── WEB-INF/
-
 │ ├── views/
-
 │ └── web.xml
-
 └── pom.xml
 
 ---
