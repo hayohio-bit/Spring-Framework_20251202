@@ -1,4 +1,5 @@
 package org.zerock.mapper;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,13 @@ public class TimeMapperTests {
 	
 	@Test
 	public void testTime1() {
-		log.info("-----------------------");
+		log.info("--------------------------");
 		log.info(timeMapper.getTime());
 	}
-	
+
 	@Test
 	public void testTime2() {
-		log.info("-----------------------");
+		log.info("--------------------------");
 		log.info(timeMapper.getTime2());
 	}
-	
 }
-

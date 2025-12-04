@@ -32,8 +32,8 @@
           </tbody>
         </table>
       </div>
-      
-            <!-- Pagination -->
+
+      <!-- Pagination -->
       <nav>
         <ul class="pagination justify-content-center">
           <li class="page-item disabled"><a class="page-link">Previous</a></li>
@@ -43,6 +43,6 @@
           <li class="page-item"><a class="page-link" href="#">Next</a></li>
         </ul>
       </nav>
-      
-<%@include file="/WEB-INF/views/includes/footer.jsp" %>
-      
+
+ 
+<%@ include file="/WEB-INF/views/includes/footer.jsp" %>      

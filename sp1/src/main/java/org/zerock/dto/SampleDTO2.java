@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @Setter
 @ToString
-public class SampleDTO {
+public class SampleDTO2 {
 	private String name;
-	private int age;
+	private String id;
 }
