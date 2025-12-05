@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.dto.BoardDTO;
 import org.zerock.service.BoardService;
 
@@ -48,18 +50,34 @@ public class BoardController {
 	
 	// 등록 처리
 	@PostMapping("/register")
-	public String registerPost() {
+	public String registerPost(BoardDTO dto, RedirectAttributes rttr) {
 		log.info("-------------------");
 		log.info("board register post");
+		
+		// 게시물 등록하면 등록된 번호를 반환
+		Long bno = boardService.register(dto);
+		
+		rttr.addFlashAttribute("result", bno);
+		
+		/* 1회용(1번 요청에만 유지되는) 데이터를 전달하는 방식
+		 redirect 이후에 단 한 번만 사용할 값을 저장할 때 사용
+		 URL 파라미터로 노출되지 않아서 보안상 안전함
+		 예) 글 작성 후 "글번호", "성공 메시지" 등을 다음 화면에 잠깐 보여줄 때 활용
+		*/
+		
 		return "redirect:/board/list";
 	}
 	
 	// 단건 조회	localhost:8080/board/read/1
 	// db에서 1번 데이터 보여줌
 	@GetMapping("/read/{bno}")
-	public String read(@PathVariable("bno") Long bno) {
+	public String read(@PathVariable("bno") Long bno, Model model ) {
 		
 		log.info("board read");
+		
+		BoardDTO dto = boardService.read(bno);
+		model.addAttribute("board", dto);
+		
 		return "/board/read";
 		
 	}
@@ -69,24 +87,34 @@ public class BoardController {
 	 * localhost:8080/board/modify/1
 	 */ 
 	@GetMapping("/modify/{bno}")
-	public String modifyGet(@PathVariable("bno") Long bno) {
+	public String modifyGet(@PathVariable("bno") Long bno, Model model) {
 		log.info("board modify get");
+		BoardDTO dto = boardService.read(bno);
+		model.addAttribute("board", dto);
+		
 		return "board/modify";
 	}
 	
-	@PostMapping("/modify/")
-	public String modifyPost(){
+	@PostMapping("/modify")
+	public String modifyPost(BoardDTO dto){
 		log.info("board modify post");
 		
-		return "redirect:/board/read/1";
+		boardService.modify(dto);
+		
+		return "redirect:/board/read/"+dto.getBno();
 	}
 	
 	/*
 	 * 삭제
 	 */
 	@PostMapping("/remove")
-	public String remove() {
-		log.info("board remove post");
+	public String remove(@RequestParam("bno") Long bno,
+			RedirectAttributes rttr) {
+		log.info("board remove post : " + bno);
+		
+		boardService.remove(bno);
+		
+		rttr.addFlashAttribute("result", bno);
 		
 		return "redirect:/board/list";
 	}

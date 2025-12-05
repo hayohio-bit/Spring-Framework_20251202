@@ -50,27 +50,28 @@
 </div>
 
 
-<!-- <script type="text/javascript">
-  const formObj = document.querySelector("#actionForm");
+<script type="text/javascript">
+	const formObj = document.querySelector("#actionForm");
+	document.querySelector(".btnModify").addEventListener("click", () => {
+		formObj.action = '/board/modify';
+		formObj.method = 'post';
+		formObj.submit();
+	});
+	
+	document.querySelector(".btnList").addEventListener("click", () => {
+		formObj.action = '/board/list';
+		formObj.method = 'get';
+		formObj.submit();
+	});
+	
+	document.querySelector(".btnRemove").addEventListener("click", () => {
+		formObj.action = '/board/remove';
+		formObj.method = 'post';
+		formObj.submit();
+	});
+	
+</script>
 
-  document.querySelector(".btnModify").addEventListener("click", () => {
-    formObj.action = '/board/modify';
-    formObj.method = 'post';
-    formObj.submit();
-  });
-
-  document.querySelector(".btnList").addEventListener("click", () => {
-    formObj.action = '/board/list';
-    formObj.method = 'get';
-    formObj.submit();
-  });
-
-  document.querySelector(".btnRemove").addEventListener("click", () => {
-    formObj.action = '/board/remove';
-    formObj.method = 'post';
-    formObj.submit();
-  });
-</script> -->
 
 <%@ include file="/WEB-INF/views/includes/footer.jsp" %>
 
