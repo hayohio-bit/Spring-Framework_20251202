@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.mapper.SimpleTodoMapper">
+
+	<insert id="insert" parameterType="org.zerock.dto.TodoDTO" useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO simple_todo (title, description, done, created_at)
+	VALUES (#{title}, #{description}, #{done}, NOW())
+	</insert>
+	
+	<select id="selectOne" parameterType="int" resultType="org.zerock.dto.TodoDTO">
+	SELECT * FROM simple_todo WHERE id = #{id}
+	</select>
+
+	<select id="selectAll" resultType="org.zerock.dto.TodoDTO">
+	SELECT * FROM simple_todo ORDER BY created_at DESC
+	</select>
+
+	<update id="update" parameterType="org.zerock.dto.TodoDTO">
+	UPDATE simple_todo SET title=#{title}, description=#{description}, done=#{done} WHERE id=#{id}
+	</update>
+
+	<delete id="delete" parameterType="int">
+	DELETE FROM simple_todo WHERE id=#{id}
+	</delete>
+
+</mapper>
