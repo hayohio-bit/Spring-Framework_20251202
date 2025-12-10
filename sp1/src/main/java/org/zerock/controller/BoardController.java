@@ -26,22 +26,29 @@ public class BoardController {
 	private final BoardService boardService;
 	
 	/*
-	//localhost:8080/board/ex1 -> /WEB-INF/ views / board / ex1.jsp
-	@GetMapping("/ex1")
-	void ex1() {
-		
-	}
-	*/
-	
-	//localhost:8080/board/list 
-	// -> /WEB-INF/ views / board / list.jsp
 	@GetMapping("/list")
 	public void list(Model model) {
 		log.info("board list");
 		
 		model.addAttribute("list", boardService.getList());
 	}
+	*/
 	
+	// page?1 , size?10
+	@GetMapping("/list")
+	public void list(
+		@RequestParam( name = "page", defaultValue = "1") int page,
+		@RequestParam( name = "size", defaultValue = "10") int size,
+		Model model) {
+		
+		log.info("page : " + page);
+		log.info("size : " + size);
+		
+		// service.getList(page, size) → BoardListPagingDTO 반환
+        // "dto"라는 이름으로 JSP에 전달 (EL: ${dto.pageNums})
+		model.addAttribute("dto", boardService.getList(page, size));
+	}
+
 	// 등록 화면
 	@GetMapping("/register")
 	public void register() {

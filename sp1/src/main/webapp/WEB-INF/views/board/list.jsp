@@ -20,7 +20,7 @@
                   <th>RegDate</th>
                </thead>
                <tbody class="tbody">
-                  <c:forEach var="board" items="${list}">
+                  <c:forEach var="board" items="${dto.boardDTOList}">
                      <tr data-bno=${board.bno}>
                         <td><a href='/board/read/${board.bno }'>
                         	<c:out value="${board.bno}" /></a></td>
@@ -34,6 +34,28 @@
                   
                </tbody>
             </table>
+            
+            <!--  화면에 페이지 번호 출력 -->
+            <div class="d-flex justify-content-center">
+            	<ul class="pagination">
+            	
+            		<c:if test="${dto.prev}">
+				    <li class="page-item">
+				    	<a class="page-link" href="${dto.start -1 }" tabindex="-1">Previous</a></li>
+				    </c:if>
+				     
+				    <c:forEach var="num" items="${dto.pageNums}">
+				    <li class="page-item ${dto.page == num ? 'active':'' } ">
+				    	<a class="page-link" href="${num}"> ${num} </a></li>
+				    </c:forEach>
+
+					<c:if test="${dto.next}">
+				    <li class="page-item">
+				      <a class="page-link" href="${dto.end + 1 }">Next</a></li>
+				    </c:if>
+				</ul>
+			</div>
+            
          </div>   
       </div>
    </div>
@@ -67,6 +89,8 @@
      - 여러 개의 defer 스크립트는 HTML에 작성된 순서대로 실행됨
 -->
 <script type="text/javascript" defer="defer">
+
+	// 게시물 등록시 모달 표시
 	const result = '${result}'
 	
 	const myModal = new bootstrap.Modal(document.getElementById('myModal'))
@@ -75,6 +99,32 @@
 		document.getElementById('modalResult').innerText = result
 		myModal.show()
 	}
+	
+	// 페이징 이벤트 처리
+	const pagingDiv = document.querySelector(".pagination")
+	
+	pagingDiv.addEventListener("click", (e) => {
+		e.preventDefault()
+		e.stopPropagation()
+		
+		const target = e.target
+		
+		// console.log(target)
+		
+		const targetPage = target.getAttribute("href")
+		
+		const size = ${dto.size}|| 10 // BoardListPagingDT의 size
+		
+		const params = new URLSearchParams({
+			page: targetPage,
+			size: size
+		});
+		
+		self.location=`/board/list?\${params.toString()}`
+		// JavaScript 백틱(`) 이스케이프 => \ 사용
+		// 백틱(`) 안에서 \${} 하면 ${params.toString()} 문자열 그대로 나옴
+		
+	}, false)
 	
 </script>
 

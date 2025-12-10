@@ -1,7 +1,10 @@
 package org.zerock.mapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,4 +82,32 @@ public class BoardMapperTests {
 		
 	}
 	
+	@Test
+	public void testPagining() {
+		
+		int page = 1;
+		
+		// 계산
+		int skip = (page -1) * 10;
+		int count = 10;
+		
+		boardMapper.list2(skip, count)
+			.forEach(board-> log.info(board));
+	}
+	
+	@Test
+	public void testPageNums() {
+		// rangeClosed = 끝 숫자도 포함! range는 끝 숫자 뺌)
+		IntStream.range(1, 5).forEach(i -> log.info(i));
+		
+		log.info(
+		        IntStream.rangeClosed(1, 5)
+		            .mapToObj(String::valueOf)
+		            .collect(Collectors.joining(" "))
+		    );
+		
+		List<Integer> list = IntStream.rangeClosed(1, 5).boxed().toList();
+	    log.info(list);
+	   }
+		
 }
