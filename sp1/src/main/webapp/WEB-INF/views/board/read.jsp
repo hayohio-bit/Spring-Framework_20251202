@@ -1,6 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/includes/header.jsp" %>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+
+<style>
+* {font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif !important;}
+a {font-family: 'Gugi', 'Noto Sans KR';}
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Pretendard Variable', Pretendard, sans-serif !important;
+    font-weight: 700;
+}
+</style>
+
 
 <div class="row justify-content-center">
   <div class="col-lg-12">

@@ -50,6 +50,19 @@
   	where bno>0 and delflag = false
   </select>
   
+  <select id="listSearch" resultType="BoardDTO">
+  SELECT bno, title, writer, regDate FROM tbl_board
+  WHERE delfalg = false
+  
+  <if test="types != null and keyword != null">
+  	<foreach collection="types" item="type">
+  	#{type}
+  	</foreach></if>
+  
+  ORDER BY bno desc
+  limit #{skip}, #{count}
+  </select>
+  
 </mapper>
 
 

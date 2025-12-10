@@ -6,17 +6,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Panel</title>
+  <title>Spring</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Gugi:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+	* { font-family: 'Pretendard', 'Noto Sans KR', sans-serif; }
+	content { font-family: 'Pretendard', 'Noto Sans KR', sans-serif; font-size: 1.5rem; }
+	.table a { color:navy; text-decoration: none !important;}
+	.table a:hover { text-decoration: underline !important;}
+  </style>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
+
 <body>
 
   <!-- Top Navbar -->
   <nav class="navbar navbar-expand-lg navbar-custom px-4">
-    <a class="navbar-brand" href="#">AdminPanel</a>
+    <a class="navbar-brand" href="/board/list" style="font-family: 'Gugi', 'Noto Sans KR';">스프링 뿌시기</a>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>

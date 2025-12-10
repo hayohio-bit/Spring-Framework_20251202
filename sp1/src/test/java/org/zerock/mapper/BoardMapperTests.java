@@ -109,5 +109,19 @@ public class BoardMapperTests {
 		List<Integer> list = IntStream.rangeClosed(1, 5).boxed().toList();
 	    log.info(list);
 	   }
+	
+	@Test
+	public void testSearch() {
+		int page = 2;
+		
+		// 계산
+		int skip = ( page -1 ) * 10;
+		int count = 10;
+		
+		String[] types = new String[] {"T","C","W"};
+		String keyword = "Test";
+		
+		boardMapper.listSearch(skip, count, types, keyword);
+	}
 		
 }
