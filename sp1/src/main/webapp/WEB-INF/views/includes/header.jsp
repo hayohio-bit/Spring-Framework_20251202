@@ -25,7 +25,7 @@
 
   <!-- Top Navbar -->
   <nav class="navbar navbar-expand-lg navbar-custom px-4">
-    <a class="navbar-brand" href="/board/list" style="font-family: 'Gugi', 'Noto Sans KR';">스프링 뿌시기</a>
+    <a class="navbar-brand" href="/board/list" style="font-family: Pretendard Variable', 'Noto Sans KR';">스프링 뿌시기</a>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>

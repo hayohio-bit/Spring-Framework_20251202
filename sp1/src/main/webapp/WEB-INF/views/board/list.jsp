@@ -12,10 +12,10 @@
    <div class="col-lg-12">
       <div class="card shadow mb-4">
          <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Board List</h6>
+			<h6 class="m-0 fw-bold text-primary">Board List</h6>
          </div>
-         
          <div class="card-body">
+         
             <table class="table table-boardered" id="dataTable">
                <thead>
                   <th>Bno</th>
@@ -26,10 +26,22 @@
                <tbody class="tbody">
                   <c:forEach var="board" items="${dto.boardDTOList}">
                      <tr data-bno=${board.bno}>
-                        <td><a href='/board/read/${board.bno }'>
-                        	<c:out value="${board.bno}" /></a></td>
-                        <td><a href='/board/read/${board.bno }'>
-                        	<c:out value="${board.title}" /></a></td>
+                        <td>${board.bno}</td>
+						<td>
+	                        <c:url var="readUrl" value="/board/read/${board.bno}">
+								<c:param name="page" value="${dto.page}" />
+								<c:param name="size" value="${dto.size}" />
+								<c:if test="${not empty dto.types}">
+								<c:param name="types" value="${dto.types}" />
+								</c:if>
+								<c:if test="${not empty dto.keyword}">
+								<c:param name="keyword" value="${dto.keyword}" />
+								</c:if>
+							</c:url>
+	                        <a href="${readUrl}">
+	                        	<c:out value="${board.title}" />
+	                        </a>
+						</td>
                         
                         <td><c:out value="${board.writer}" /></td>
                         <td><c:out value="${board.createdDate}" /></td>
@@ -39,18 +51,41 @@
                </tbody>
             </table>
             
+            <!-- 검색 조건 -->
+            <div class="card-body">
+            	<div class="d-flex jusfify-content-end" style="margin-bottom: 2em">
+					<div style="width: 50%;" class="d-flex">
+						<select name="typeSelect" class="form-select me-2">
+							<option value="">--</option>
+							<option value="T" ${dto.types == 'T' ? 'selected' : ''}>제목</option>
+							<option value="C" ${dto.types == 'C' ? 'selected' : ''}>내용</option>
+							<option value="W" ${dto.types == 'W' ? 'selected' : ''}>작성자</option>
+							<option value="TC" ${dto.types == 'TC' ? 'selected' : ''}>제목 OR 내용</option>
+							<option value="TW" ${dto.types == 'TW' ? 'selected' : ''}>제목 OR 작성자</option>
+							<option value="TCW" ${dto.types == 'TCW' ? 'selected' : ''}>제목 OR 내용 OR 작성자</option>
+						</select>					
+					</div>
+					<input type="text" 
+						class="form-control me-2"
+						name="keywordInput" 
+						value="<c:out value='${dto.keyword}'/>" />
+						
+					<button class="btn btn-outline-info searchBtn">Search</button>
+ 				</div>           	
+            </div>
+            
+            
             <!--  화면에 페이지 번호 출력 -->
             <div class="d-flex justify-content-center">
             	<ul class="pagination">
-            	
             		<c:if test="${dto.prev}">
 				    <li class="page-item">
-				    	<a class="page-link" href="${dto.start -1 }" tabindex="-1">Previous</a></li>
+				    	<a class="page-link" href="${dto.start -1}" tabindex="-1">Previous</a></li>
 				    </c:if>
 				     
 				    <c:forEach var="num" items="${dto.pageNums}">
-				    <li class="page-item ${dto.page == num ? 'active':'' } ">
-				    	<a class="page-link" href="${num}"> ${num} </a></li>
+				    <li class="page-item ${dto.page == num ? 'active':''}">
+				    	<a class="page-link" href="${num}">${num}</a></li>
 				    </c:forEach>
 
 					<c:if test="${dto.next}">
@@ -73,7 +108,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p><span id="modalResult"></span>번 글이 등록되었습니다.</p>
+        <p><span id="modalResult"></span>번 글을 처리했다.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary">Save changes</button>
@@ -115,7 +150,8 @@
 		
 		// console.log(target)
 		
-		const targetPage = target.getAttribute("href")
+		const targetPage = target.getAttribute("href");
+		if (!targetPage) return;
 		
 		const size = ${dto.size}|| 10 // BoardListPagingDT의 size
 		
@@ -124,10 +160,37 @@
 			size: size
 		});
 		
+		const types = '${dto.types}'
+		const keyword = '${dto.keyword}'
+		
+		if(types && keyword){
+			params.set('types', types)
+			params.set('keyword', keyword)
+		}
+				
 		self.location=`/board/list?\${params.toString()}`
 		// JavaScript 백틱(`) 이스케이프 => \ 사용
 		// 백틱(`) 안에서 \${} 하면 ${params.toString()} 문자열 그대로 나옴
 		
+	}, false)
+	
+	// 검색 조건
+	document.querySelector(".searchBtn").addEventListener('click', e => {
+		const keyword = document.querySelector("input[name='keywordInput']").value.trim()
+		const selectObj = document.querySelector("select[name='typeSelect']")
+		const types = selectObj.options[selectObj.selectedIndex].value
+		
+		const params = new URLSearchParams();
+
+		  if (types)   params.set('types', types);
+		  if (keyword) params.set('keyword', keyword);
+
+		  // 검색 시에는 1페이지부터 시작
+		  params.set('page', 1);
+		  params.set('size', ${dto.size} || 10);
+
+		
+		self.location=`/board/list?\${params.toString()}`
 	}, false)
 	
 </script>

@@ -124,4 +124,13 @@ public class BoardMapperTests {
 		boardMapper.listSearch(skip, count, types, keyword);
 	}
 		
+	@Test
+	public void testCount() {
+		String[] types = new String[] {"T","C"};
+		
+		String keyword = "s";
+		
+		int result = boardMapper.listCountSearch(types, keyword);
+		log.info("전체 갯수 : " + result);
+	}
 }

@@ -1,13 +1,8 @@
 @charset "UTF-8";
 
 * {
-    font-family: 'Gugi', 'Nanum Gothic', sans-serif !important;
+    font-family: 'Nanum Gothic', sans-serif !important;
 }
-
-/* 세부 조정 */
-h1,h2,h3,h4,h5,h6 { font-family: 'Gamja Flower', cursive !important; }
-.table { font-family: 'Jua', sans-serif !important; }
-
 
 body {
   min-height: 100vh;

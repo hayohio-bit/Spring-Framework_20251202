@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.dto.BoardDTO;
+import org.zerock.dto.BoardListPagingDTO;
 import org.zerock.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
@@ -35,18 +36,26 @@ public class BoardController {
 	*/
 	
 	// page?1 , size?10
+	
 	@GetMapping("/list")
 	public void list(
-		@RequestParam( name = "page", defaultValue = "1") int page,
-		@RequestParam( name = "size", defaultValue = "10") int size,
+		@RequestParam(name="page", defaultValue = "1") int page,
+		@RequestParam(name="size", defaultValue = "10") int size,
+		@RequestParam(name="types", required = false) String types,
+		@RequestParam(name="keyword", required = false) String keyword,
 		Model model) {
 		
-		log.info("page : " + page);
-		log.info("size : " + size);
+		model.addAttribute("dto", boardService.getList(page, size, types, keyword));
 		
-		// service.getList(page, size) → BoardListPagingDTO 반환
-        // "dto"라는 이름으로 JSP에 전달 (EL: ${dto.pageNums})
-		model.addAttribute("dto", boardService.getList(page, size));
+		/*
+		 * log.info("board list");
+		 * 
+		 * BoardListPagingDTO list = boardService.getList(page, size, types, keyword);
+		 * // service.getList(page, size) → BoardListPagingDTO 반환
+		 * // "dto"라는 이름으로 JSP에 전달 (EL: ${dto.pageNums})
+		 *
+		 * model.addAttribute("dto", list);
+		 */
 	}
 
 	// 등록 화면
@@ -78,15 +87,25 @@ public class BoardController {
 	// 단건 조회	localhost:8080/board/read/1
 	// db에서 1번 데이터 보여줌
 	@GetMapping("/read/{bno}")
-	public String read(@PathVariable("bno") Long bno, Model model ) {
+	public String read(@PathVariable("bno") Long bno, 
+			@RequestParam(name="page", defaultValue = "1") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size,
+			@RequestParam(name = "types", required = false) String types,
+			@RequestParam(name = "keyword", required = false) String keyword,
+			Model model) {
 		
-		log.info("board read");
+		// log.info("board read");
 		
 		BoardDTO dto = boardService.read(bno);
 		model.addAttribute("board", dto);
 		
-		return "/board/read";
+		// 검색/페이징 정보도 모델에 담아서 JSP에서 사용
+		model.addAttribute("page", page);
+		model.addAttribute("size", size);
+		model.addAttribute("types", types);
+		model.addAttribute("keyword", keyword);
 		
+		return "/board/read";
 	}
 	
 	/*

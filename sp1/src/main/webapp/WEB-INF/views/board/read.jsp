@@ -5,13 +5,12 @@
 
 <style>
 * {font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif !important;}
-a {font-family: 'Gugi', 'Noto Sans KR';}
+a {font-family: 'Pretendard Variable', 'Noto Sans KR';}
 h1,h2,h3,h4,h5,h6 {
     font-family: 'Pretendard Variable', Pretendard, sans-serif !important;
     font-weight: 700;
 }
 </style>
-
 
 <div class="row justify-content-center">
   <div class="col-lg-12">
@@ -20,7 +19,7 @@ h1,h2,h3,h4,h5,h6 {
         <h6 class="m-0 fw-bold text-primary">Board Read</h6>
       </div>
       <div class="card-body">
-        
+      
         <div class="mb-3 input-group input-group-lg">
           <span class="input-group-text">Bno</span>
           <input type="text" class="form-control" value="<c:out value='${board.bno}'/>" readonly>
@@ -46,17 +45,39 @@ h1,h2,h3,h4,h5,h6 {
           <input type="text" name="regDate" class="form-control" value="<c:out value='${board.createdDate}'/>" readonly>
         </div>
 
-        <div class="float-end">
-           <a href='/board/list'>
+		<div class="float-end">
+           <c:url var="readUrl" value="/board/list">
+			  <c:param name="page" value="${page}" />
+			  <c:param name="size" value="${size}" />
+			  <c:if test="${not empty types}">
+			  <c:param name="types" value="${types}" />
+			  </c:if>
+			  <c:if test="${not empty keyword}">
+			  <c:param name="keyword" value="${keyword}" />
+			  </c:if>
+			</c:url>
+           <a href='${readUrl}'>
+             <button type="button" class="btn btn-info btnList" >LIST</button>
+           </a>  
+          <c:if test="${!board.delFlag}">
+            <a href='/board/modify/${board.bno}'>
+            	<button type="button" class="btn btn-warning btnModify" >MODIFY</button>
+            </a>	
+          </c:if>
+        </div>
+
+<%--
+         <div class="float-end">
+           <a href="/board/list?page=${page}&size=${size}&types=${types}&keyword=${keyword}">
              <button type="button" class="btn btn-info btnList" >LIST</button>
            </a>
-          
           <c:if test="${!board.delFlag}">
             <a href='/board/modify/${board.bno}'>
                <button type="button" class="btn btn-warning btnModify" >MODIFY</button>
             </a>   
           </c:if>
-        </div>
+        </div> 
+--%>
 
       </div>
     </div>
