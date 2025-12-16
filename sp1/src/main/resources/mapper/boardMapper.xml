@@ -1,94 +1,85 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.zerock.mapper.BoardMapper">
-  
-  <insert id="insert">
-  
-  	<selectKey order="AFTER" keyProperty="bno" resultType="long">
-  		select LAST_INSERT_ID()
-  	</selectKey>
-  
-	  insert into tbl_board(title,content, writer)
-	  values (#{title}, #{content}, #{writer})
-  </insert>
-  
-  <select id="selectOne" resultType="org.zerock.dto.BoardDTO">
-  	select * from tbl_board where bno = #{bno}
-  </select>
-  
-  <update id="remove">
-  	update tbl_board set delflag = true 
-  	where bno = #{bno}
-  </update>
-  
-  <update id="update">
-  	update tbl_board set 
-  		title=#{title}, content=#{content},
-  		updatedate = now(), delflag = #{delFlag}
-  	where bno = #{bno}
-  </update>
-  
-  <select id="list" resultType="BoardDTO">
-  	select bno, title, writer, content, regDate 
-  	from tbl_board
-  	where delflag = false
-  	order by bno desc 
-  </select>
 
-  <select id="list2" resultType="BoardDTO">
-  	select bno, title, writer, content, regDate 
-  	from tbl_board
-  	where delflag = false
-  	order by bno desc 
-  	limit #{count} offset #{skip}
-  </select>
-  
-  <select id="listCount" resultType="int">
-  	select count(bno) from tbl_board
-  	where bno>0 and delflag = false
-  </select>
-  
-  
-  <sql id="search">
-  	<if test="types != null and keyword != null">
-	  	<foreach collection="types" item="type" 
-	  	open="AND (" close=")" separator=" OR ">
-			
-			<if test='type.equals("T")'>
-				title like CONCAT('%',#{keyword}, '%')
-			</if>
-			<if test='type.equals("C")'>
-				content like CONCAT('%', #{keyword}, '%')
-			</if>
-			<if test='type.equals("W")'>
-				writer like CONCAT('%', #{keyword}, '%')
-			</if>
-	  	</foreach>
-	  </if>
-  </sql>
-  
-  
-  <select id="listSearch" resultType="BoardDTO">
-	  SELECT bno, title, writer, regDate 
-	  FROM tbl_board 
-	  WHERE delflag = false
-	  
-	  <include refid="search"></include>
-		order by bno desc limit #{skip}, #{count}
-  </select>
-  
-  
-  <select id="listCountSearch" resultType="int">
-	  SELECT count(bno)
-	  FROM tbl_board 
-	  WHERE delflag = false
-	  
-  	  <include refid="search"></include>
+	<insert id="insert">
 
-  </select>
-  
+		<selectKey order="AFTER" keyProperty="bno" resultType="long">
+			select LAST_INSERT_ID()
+		</selectKey> insert into
+		tbl_board(title,content, writer) values (#{title}, #{content},
+		#{writer}) </insert>
+
+	<select id="selectOne" resultType="org.zerock.dto.BoardDTO">
+		select * from tbl_board where bno = #{bno}
+	</select>
+
+	<update id="remove">
+		update tbl_board set delflag = true
+		where bno = #{bno}
+	</update>
+
+	<update id="update">
+		update tbl_board set
+		title=#{title}, content=#{content},
+		updatedate = now(), delflag = #{delFlag}
+		where bno = #{bno}
+	</update>
+
+	<select id="list" resultType="BoardDTO">
+		select bno, title, writer, content, regDate
+		from tbl_board
+		where delflag = false
+		order by bno desc
+	</select>
+
+	<select id="list2" resultType="BoardDTO">
+		select bno, title, writer, content, regDate
+		from tbl_board
+		where delflag = false
+		order by bno desc
+		limit #{count} offset #{skip}
+	</select>
+
+	<select id="listCount" resultType="int">
+		select count(bno) from tbl_board
+		where bno>0 and delflag = false
+	</select>
+
+
+	<!-- 공통 검색 조건 조각 정의 -->
+	<sql id="search">
+	    <!-- 검색 타입 배열과 키워드가 모두 유효할 때만 조건을 추가 -->
+	    <if test="types != null and types.length > 0 and keyword != null and keyword != ''">
+	        <!-- types 배열을 순회하면서 타입별 OR 조건을 만든다: AND ( ... OR ... OR ... ) -->
+	        <foreach collection="types" item="type" open="AND (" close=")" separator=" OR ">
+	            <!-- 타입이 'T'인 경우: 제목(title)으로 검색 -->
+	            <if test='type == "T"'>
+	                title LIKE CONCAT('%', #{keyword}, '%')
+	            </if>
+	            <!-- 타입이 'C'인 경우: 내용(content)으로 검색 -->
+	            <if test='type == "C"'>
+	                content LIKE CONCAT('%', #{keyword}, '%')
+	            </if>
+	            <!-- 타입이 'W'인 경우: 작성자(writer)로 검색 -->
+	            <if test='type == "W"'>
+	                writer LIKE CONCAT('%', #{keyword}, '%')
+	            </if>
+	        </foreach>
+	    </if>
+	</sql>
+
+
+	<select id="listSearch" resultType="BoardDTO"> SELECT bno, title, writer,
+		regDate FROM tbl_board WHERE delflag = false <include refid="search"></include>
+		order by bno desc limit #{skip}, #{count} </select>
+
+
+	<select id="listCountSearch" resultType="int"> SELECT count(bno) FROM
+		tbl_board WHERE delflag = false <include refid="search"></include>
+
+	</select>
+
 </mapper>
 
 	  
