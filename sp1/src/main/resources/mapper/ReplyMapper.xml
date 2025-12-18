@@ -34,5 +34,10 @@
 		order by rno asc
 		limit #{limit} offset #{skip}
 	</select>
+	
+	<select id="countOfBoard" resultType="int">
+		SELECT count(rno) FROM tbl_reply
+		WHERE bno = #{bno} AND rno > 0
+	</select>
 
 </mapper>

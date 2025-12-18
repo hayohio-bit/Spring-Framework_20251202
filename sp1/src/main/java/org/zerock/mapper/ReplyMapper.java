@@ -17,6 +17,9 @@ public interface ReplyMapper {
 	
 	List<ReplyDTO> listOfBoard(
 			@Param("bno") Long bno,
-			@Param("skip")int skip,
+			@Param("skip") int skip,
 			@Param("limit") int limit);
+	
+	int countOfBoard(@Param("bno") Long bno);
+	// 특정 게시물의 모든 댓글의 개수 파악을 위해 추가
 }
