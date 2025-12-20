@@ -16,7 +16,7 @@
 			justify-content-between : 가로 방향으로 정렬, 양끝으로 배분
 			align-items-center : 세로 방향 정렬
 			 -->
-         <div class="card-header py-3 d-flex  justify-content-between  align-items-center">
+         <div class="card-header py-3 d-flex justify-content-between align-items-center">
 				<h6 class="m-0 font-weight-bold text-primary">Board List</h6>
 				<a href="/board/register" class="btn btn-primary btn-sm">
 					등록
@@ -24,16 +24,20 @@
 		</div>
          <div class="card-body">
          
-            <table class="table table-boardered" id="dataTable">
+            <table class="table table-bordered" id="dataTable">
                <thead>
+               	<tr>
                   <th>Bno</th>
                   <th>Title</th>
                   <th>Writer</th>
                   <th>RegDate</th>
+                 </tr>
                </thead>
                <tbody class="tbody">
+               
                   <c:forEach var="board" items="${dto.boardDTOList}">
-                     <tr data-bno=${board.bno}>
+                  
+                     <tr data-bno="${board.bno}">
                         <td>${board.bno}</td>
 						<td>
 	                        <c:url var="readUrl" value="/board/read/${board.bno}">
@@ -46,6 +50,7 @@
 								<c:param name="keyword" value="${dto.keyword}" />
 								</c:if>
 							</c:url>
+							
 	                        <a href="${readUrl}">
 	                        	<c:out value="${board.title}" />
 	                        </a>
@@ -108,18 +113,18 @@
    </div>
 </div>
 
-<div class="modal" tabindex="-1" id="myModal">
+<div class="modal fade" tabindex="-1" id="myModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <p><span id="modalResult"></span>번 글을 처리했다.</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary"  data-bs-dismiss="modal">Save changes</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>

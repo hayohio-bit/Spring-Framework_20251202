@@ -31,7 +31,7 @@ public class ReplyService {
 	
 		try {
 			replyMapper.insert(replyDTO);
-		}catch (Exception e) {
+		}catch(Exception e) {
 			throw new ReplyException(500, "INSERT ERROR");
 			// 에러 래핑 : 낮은 레벨 예외 e를 숨기고, "댓글 등록 실패" 상황을 명확하게 알림
 		}
@@ -46,7 +46,7 @@ public class ReplyService {
 			return replyMapper.read(rno);
 			// ReplyMapper의 read 메서드 호출 > 전달받은 rno와 일치하는 댓글 레코드 DB에서 조회
 			// > ReplyDTO 형태로 반환 
-		}catch (Exception e) {
+		}catch(Exception e) {
 			throw new ReplyException(404, "NOT FOUND");
 		}
 	}
@@ -65,7 +65,7 @@ public class ReplyService {
 				throw new ReplyException(404, "NOT FOUND");
 				// 수정 대상 부재를 
 			}
-		} catch (Exception e) {
+		} catch(Exception e) {
 			throw new ReplyException(500, "UPDATE ERROR");
 		}
 	}
@@ -78,12 +78,12 @@ public class ReplyService {
 			if(count == 0) {
 				throw new ReplyException(404, "NOT FOUND");
 			}
-		} catch (Exception e) {
+		} catch(Exception e) {
 			throw new ReplyException(500, "DELETE ERROR");
 		}
 	}
 	
-	public ReplyListPagingDTO listOfBoard( Long bno, int page, int size ) {
+	public ReplyListPagingDTO listOfBoard(Long bno, int page, int size ) {
 		
 		try {
 			
@@ -95,10 +95,10 @@ public class ReplyService {
 			
 			return new ReplyListPagingDTO(replyDTOList, count, page, size);
 			
-		}catch (Exception e) {
+		}catch(Exception e) {
 			throw new ReplyException(500, e.getMessage());
 		}
 		
 	}
-	
 }
+

@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 @Data
 public class BoardListPagingDTO {
