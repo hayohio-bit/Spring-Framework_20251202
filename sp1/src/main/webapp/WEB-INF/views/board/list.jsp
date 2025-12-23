@@ -34,33 +34,36 @@
                  </tr>
                </thead>
                <tbody class="tbody">
-               
                   <c:forEach var="board" items="${dto.boardDTOList}">
-                  
                      <tr data-bno="${board.bno}">
-                        <td>${board.bno}</td>
-						<td>
-	                        <c:url var="readUrl" value="/board/read/${board.bno}">
-								<c:param name="page" value="${dto.page}" />
-								<c:param name="size" value="${dto.size}" />
-								<c:if test="${not empty dto.types}">
-								<c:param name="types" value="${dto.types}" />
-								</c:if>
-								<c:if test="${not empty dto.keyword}">
-								<c:param name="keyword" value="${dto.keyword}" />
-								</c:if>
-							</c:url>
+                        <td>
+                        	<a href='/board/read/${board.bno}'>
+                        		<c:out value="${board.bno}"/>
+                        	</a>
+                        </td>
+                        
+						<c:url var="readUrl" value="/board/read/${board.bno}">
+							<c:param name="page" value="${dto.page}" />
+							<c:param name="size" value="${dto.size}" />
+							<c:if test="${not empty dto.types}">
+							<c:param name="types" value="${dto.types}" />
+							</c:if>
+							<c:if test="${not empty dto.keyword}">
+							<c:param name="keyword" value="${dto.keyword}" />
+							</c:if>
+						</c:url>
 							
-	                        <a href="${readUrl}">
+						<td>
+							<a href="${readUrl}">
 	                        	<c:out value="${board.title}" />
-	                        </a>
-						</td>
+	                        	<b style="color:blue">
+	                        	[ <c:out value="${board.replyCnt}" />]
+	                    </b></a></td>
                         
                         <td><c:out value="${board.writer}" /></td>
                         <td><c:out value="${board.createdDate}" /></td>
                      </tr>
                   </c:forEach>
-                  
                </tbody>
             </table>
             

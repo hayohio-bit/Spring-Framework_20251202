@@ -158,6 +158,44 @@ h1,h2,h3,h4,h5,h6 {
         </ul>
       </div>
       <!-- 페이징 끝 -->
+      
+      <!-- 댓글 모달창 -->
+      <div class="modal fade" id="replyModal" tabindex="-1" 
+      	aria-labelledby="replyModalLabel" aria-hidden="true">
+      	<div class="modal-dialog">
+      		<div class="modal-content">
+      		
+      		<div class="modal-header">
+      			<h5 class="modal-title" id="replyModalLabel"> 댓글 수정 / 삭제</h5>
+      			<button type="button" class="btn-close" data-bs-dismiss="modal"
+      				aria-label="Close"></button>
+      		</div>
+      		
+      		<div class="modal-body">
+      		
+      			<form id="replyModForm">
+      				<input type="hidden" name="rno" value="33">
+      				<div class="mb-3">
+      					<label for="replyText" class="form-label">댓글 내용</label>
+      					<input type="text" name="replyText" id="replyText" 
+      						class="form-control" value="Reply Text"/>
+      				</div>
+      				
+      			</form>
+      			
+      		</div>
+      		
+      		<div class="modal-footer">
+      			<button type="button" class="btn btn-primary btnReplyMod">수정</button>
+      			<button type="button" class="btn btn-danger btnReplyDel">삭제</button>
+      			<button type="button" class="btn btn-secondary" 
+      			data-bs-dismiss="modal">닫기</button>
+      		</div>
+      		
+      		</div>
+      	</div>
+      </div>
+      
     </div>
   </div>
 </div>
@@ -237,6 +275,8 @@ function getReplies(pageNum, goLast) {
   })
 }
 
+// 페이지 처음 로딩 시, 1페이지 기준으로 댓글을 불러오되 goLast=true로 호출
+getReplies(1, true)
 
 // 댓글 리스트가 들어갈 <ul> 요소
 const replyList = document.querySelector(".replyList")
@@ -252,7 +292,12 @@ function printReplies(data) {
   let liStr = ''    // 댓글 li들을 이어붙일 문자열
 
   // 댓글 하나씩 li로 만들기
-  for(replyDTO of replyDTOList) {
+  for(const replyDTO of replyDTOList) {
+
+	  // 삭제된 댓글은 li 자체를 만들지 않음
+	  //if(replyDTO.delflag === true || replyDTO.delFlag === true){
+		//continue
+	 // }
 
     liStr += `<li class="list-group-item" data-rno="\${replyDTO.rno}">
 <div class="d-flex justify-content-between">
@@ -319,8 +364,117 @@ function printReplies(data) {
   }, false)
 }
 
-// 페이지 처음 로딩 시, 1페이지 기준으로 댓글을 불러오되 goLast=true로 호출
-getReplies(1, true)
+
+
+// -------- 댓글 클릭 이벤트 --------
+
+const replyModal = new bootstrap.Modal(document.querySelector("#replyModal"))
+
+const replyModForm = document.querySelector("#replyModForm")
+
+replyList.addEventListener("click", e => {
+
+	//가장 가까운 상위 li 요소 찾음
+	const targetLi = e.target.closest("li")
+	
+	const rno = targetLi.getAttribute("data-rno")
+	
+	if(!rno){
+		return
+	}
+	
+	axios.get(`/replies/\${rno}`).then(res => {
+
+		const targetReply = res.data
+
+		console.log(targetReply)
+		
+		if(targetReply.delflag === false){
+
+			replyModForm.querySelector("input[name = 'rno']").value = targetReply.rno
+			
+			replyModForm.querySelector("input[name = 'replyText']").value = targetReply.replyText
+			
+			replyModal.show()
+
+		}else {
+			alert("삭제된 댓글은 조회할 수 없습니다. ")
+		}
+		
+	})
+	
+	
+}, false)
+
+
+// -------- 댓글 삭제 --------
+
+document.querySelector(".btnReplyDel").addEventListener("click", e => {
+
+	e.preventDefault()
+	e.stopPropagation()
+	
+	const formData = new FormData(replyModForm)
+	
+	const rno = formData.get("rno")
+
+	console.log("rno : " + rno)
+	
+	axios.delete(`/replies/\${rno}`).then(res => {
+		const data = res.data
+		console.log(data)
+		
+		replyModal.hide()
+		
+		// 1) 현재 페이지 기준으로 다시 목록 조회
+	    axios.get(`/replies/${bno}/list`, {
+	      params: {
+	        page: currentPage,
+	        size: currentSize
+	      }
+	    }).then(listRes => {
+	
+	      const data = listRes.data
+	      const { replyDTOList, totalCount } = data
+
+      // 2) 현재 페이지에 댓글이 하나도 없고, 전체 댓글이 0이 아니며
+      //    현재 페이지가 1보다 클 때 → 이전 페이지로 이동
+	      if (replyDTOList.length === 0 && totalCount > 0 && currentPage > 1) {
+	        getReplies(currentPage - 1)
+	      } else {
+	        getReplies(currentPage)
+	      }
+	    })
+	})
+}, false)
+
+
+// -------- 댓글 수정 --------
+
+document.querySelector(".btnReplyMod").addEventListener("click", e => {
+
+	e.preventDefault()
+	e.stopPropagation()
+	
+	const formData = new FormData(replyModForm)
+	
+	const rno = formData.get("rno")
+	
+	console.log("rno : " + rno)
+	
+	axios.put(`/replies/\${rno}`, formData).then(res => {
+		const data = res.data
+		console.log(data)
+		
+		replyModal.hide()
+		
+		getReplies(currentPage)
+		
+})
+	
+}, false)
+
+
 
 </script>
 
