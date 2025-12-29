@@ -1,8 +1,10 @@
 package org.zerock.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RequestMapping("/board")
 @RequiredArgsConstructor
+
 public class BoardController {
 
 	// 생성자 주입(DI) @RequiredArgsConstructor에 의해서
@@ -33,7 +36,6 @@ public class BoardController {
 	*/
 	
 	// page?1 , size?10
-	
 	@GetMapping("/list")
 	public void list(
 		@RequestParam(name="page", defaultValue = "1") int page,
@@ -83,6 +85,7 @@ public class BoardController {
 	
 	// 단건 조회	localhost:8080/board/read/1
 	// db에서 1번 데이터 보여줌
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/read/{bno}")
 	public String read(@PathVariable("bno") Long bno, 
 			@RequestParam(name="page", defaultValue = "1") int page,
@@ -118,14 +121,28 @@ public class BoardController {
 		return "board/modify";
 	}
 	
+	
+	
+	
+	
+	
+	@PreAuthorize("authentication.name == #dto.writer")
 	@PostMapping("/modify")
-	public String modifyPost(BoardDTO dto){
+	public String modifyPost(@ModelAttribute BoardDTO dto){
+		
+		log.info("-------------------------------------");
 		log.info("board modify post");
 		
 		boardService.modify(dto);
 		
 		return "redirect:/board/read/"+dto.getBno();
 	}
+	
+	
+	
+	
+	
+	
 	
 	/*
 	 * 삭제
@@ -141,5 +158,7 @@ public class BoardController {
 		
 		return "redirect:/board/list";
 	}
+	
+	
 	
 }
