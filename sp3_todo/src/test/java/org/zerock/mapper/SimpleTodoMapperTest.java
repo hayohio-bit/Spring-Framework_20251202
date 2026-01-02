@@ -8,14 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 import org.zerock.dto.TodoDTO;
+import java.util.List;
 
 import lombok.extern.log4j.Log4j2;
 @Log4j2
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
-@Transactional	// 각 테스트 후 자동 롤백
+//@Transactional	// 각 테스트 후 자동 롤백
 @DisplayName("SimpleTodoMapper 통합 테스트")
 class SimpleTodoMapperTest {
 
@@ -23,7 +23,7 @@ class SimpleTodoMapperTest {
 	private SimpleTodoMapper mapper;
 	
 	@Test
-    @DisplayName("새로운 todo를 DB에 INSERT할 수 있다")
+    @DisplayName("DB에 TOdo INSERT")
     public void testInsert() {
         TodoDTO dto = TodoDTO.builder()
             .title("Spring 공부")
@@ -39,6 +39,7 @@ class SimpleTodoMapperTest {
 	}
 
 	@Test
+    @DisplayName("ID로 todo 조회")
 	public void testSelectOne() {
 	    // Given: INSERT로 데이터 먼저 생성
 	    TodoDTO dto = TodoDTO.builder()
@@ -60,5 +61,28 @@ class SimpleTodoMapperTest {
 	    log.info("✅ SELECT ONE 성공: " + found);
 	}
 	
+	@Test
+	@DisplayName("모든 todo 목록 조회")
+	public void testSelectAll() {
+		// Given: 3개 INSERT
+		for (int i=1; i <=3; i++) {
+			TodoDTO dto = TodoDTO.builder()
+					.title("할일" +i)
+					.description("설명" + i)
+					.done(false)
+					.build();
+			mapper.insert(dto);
+		}
+		// When
+		List<TodoDTO> list = mapper.selectAll();
+		
+		// Then
+		assertNotNull(list, "리스트가 null이면 안 됨");
+		assertTrue(list.size() >= 3, "최소 3개 이상이어야 함");
+		
+		list.forEach(todo -> log.info("📝 " + todo));
+	    log.info("✅ SELECT ALL 성공: 총 " + list.size() + "개");
+		}
+		
+	}
 
-}
