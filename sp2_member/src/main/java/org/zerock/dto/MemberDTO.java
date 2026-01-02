@@ -6,10 +6,7 @@ import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 	/*
 CREATE TABLE tbl_member (
   mno        INT AUTO_INCREMENT PRIMARY KEY,
